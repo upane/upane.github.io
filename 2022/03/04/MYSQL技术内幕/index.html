@@ -1,0 +1,1014 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="sleep2u">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="《MySQL技术内幕》笔记数据库 MySQL技术内幕  InnoDB存储引擎 第2版.pdf  第一章 MySQL体系结构和存储引擎mysql存储引擎可自由编写，如谷歌 innodb存储引擎支持事务，行锁设计，主外键设计，聚集的方式存储，每行生成6字节rowid为主键 myisan存储引擎不支持事务，表锁设计，缓冲池缓冲索引文件（非数据文件) ndb存储引擎数据放在内存，查找快 memory存储引">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《MySQL技术内幕》笔记">
+<meta property="og:url" content="http://example.com/2022/03/04/MYSQL%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95/index.html">
+<meta property="og:site_name" content="sleep2u">
+<meta property="og:description" content="《MySQL技术内幕》笔记数据库 MySQL技术内幕  InnoDB存储引擎 第2版.pdf  第一章 MySQL体系结构和存储引擎mysql存储引擎可自由编写，如谷歌 innodb存储引擎支持事务，行锁设计，主外键设计，聚集的方式存储，每行生成6字节rowid为主键 myisan存储引擎不支持事务，表锁设计，缓冲池缓冲索引文件（非数据文件) ndb存储引擎数据放在内存，查找快 memory存储引">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/image-20220215112242482.png">
+<meta property="og:image" content="http://example.com/images/image-20220218105849111.png">
+<meta property="og:image" content="http://example.com/images/image-20220222085842816.png">
+<meta property="og:image" content="http://example.com/images/image-20220222085959643.png">
+<meta property="og:image" content="http://example.com/images/image-20220224165911884.png">
+<meta property="og:image" content="http://example.com/images/image-20220225163704233.png">
+<meta property="og:image" content="http://example.com/images/image-20220225164944473.png">
+<meta property="og:image" content="http://example.com/images/image-20220303153853715.png">
+<meta property="og:image" content="http://example.com/images/image-20220303154913987.png">
+<meta property="og:image" content="http://example.com/images/image-20220303170146629.png">
+<meta property="article:published_time" content="2022-03-04T07:38:20.000Z">
+<meta property="article:modified_time" content="2022-09-30T09:26:26.344Z">
+<meta property="article:author" content="sleep2u">
+<meta property="article:tag" content="mysql">
+<meta property="article:tag" content="innodb">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/image-20220215112242482.png">
+  
+  
+  
+  <title>《MySQL技术内幕》笔记 - sleep2u</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>sleep2u</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="《MySQL技术内幕》笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-04 15:38" pubdate>
+          2022年3月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          79 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">《MySQL技术内幕》笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="《MySQL技术内幕》笔记"><a href="#《MySQL技术内幕》笔记" class="headerlink" title="《MySQL技术内幕》笔记"></a>《MySQL技术内幕》笔记</h1><h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><blockquote>
+<p>MySQL技术内幕  InnoDB存储引擎 第2版.pdf</p>
+</blockquote>
+<h4 id="第一章-MySQL体系结构和存储引擎"><a href="#第一章-MySQL体系结构和存储引擎" class="headerlink" title="第一章 MySQL体系结构和存储引擎"></a>第一章 MySQL体系结构和存储引擎</h4><p>mysql存储引擎可自由编写，如谷歌</p>
+<p>innodb存储引擎支持事务，行锁设计，主外键设计，聚集的方式存储，每行生成6字节rowid为主键</p>
+<p>myisan存储引擎不支持事务，表锁设计，缓冲池缓冲索引文件（非数据文件)</p>
+<p>ndb存储引擎数据放在内存，查找快</p>
+<p>memory存储引擎</p>
+<p>mysql性能和选择的存储引擎，正确配置有关，</p>
+<p>mysql支持全局索引myisan和innodb都支持</p>
+<p>mysql的innodb（OLTP）支持事务，myisan（ETL场景）不支持事务，速度得看场景</p>
+<blockquote>
+<p>ETL的设计分三部分：数据抽取、数据的清洗转换、数据的加载。</p>
+<p>OLTP（<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=on-line+transaction+processing&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:851671343%7D">on-line transaction processing</a>）翻译为联机事务处理， OLAP（On-Line Analytical Processing）翻译为<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%81%94%E6%9C%BA%E5%88%86%E6%9E%90%E5%A4%84%E7%90%86&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:851671343%7D">联机分析处理</a>，从字面上来看OLTP是做事务处理，OLAP是做分析处理。从对数据库操作来看，OLTP主要是对数据的增删改，OLAP是对数据的查询。在线业务处理</p>
+</blockquote>
+<p><img src="/images/image-20220215112242482.png" srcset="/img/loading.gif" lazyload alt="image-20220215112242482"></p>
+<p>mysql连接方式：1、tcp&#x2F;ip mysql -h127.0.0.1 -u root -p   2、共享内存连接 </p>
+<p>3、unix域套接字 show variables like ‘socket’； mysql -uroot -S &#x2F;tmp&#x2F;mysql.sock</p>
+<h4 id="第二章-InnoDB存储引擎"><a href="#第二章-InnoDB存储引擎" class="headerlink" title="第二章 InnoDB存储引擎"></a>第二章 InnoDB存储引擎</h4><p>innodb高性能、高可用、高可拓展的存储引擎  ACID、MVCC、行锁设计、支持外键</p>
+<blockquote>
+<p>原子性（atomicity，或称不可分割性）、一致性（consistency）、隔离性（isolation，又称独立性）、持久性（durability）。</p>
+</blockquote>
+<p>innodb是多线程模型，后台线程为刷新内存数据为最新</p>
+<p>master thread：数据异步刷新保证数据最新</p>
+<p>io thread：io读写</p>
+<p>purge thread：事务被提交后，其所使用的undolog可能不需要，回收已使用并分配undo页，减轻master工作</p>
+<p>purge cleaner thread：</p>
+<h5 id="innodb内存"><a href="#innodb内存" class="headerlink" title="innodb内存"></a>innodb内存</h5><p>缓冲池：加快数据库整体性能，包含主要为<strong>数据页、索引页、undo页</strong>等，允许有多个缓冲池需要设置</p>
+<p>LRU算法 和插入到终点5&#x2F;8出midpoint</p>
+<p>innodb_log_buffer_size重做日志缓冲池一般为8M就够</p>
+<p>事务数据库write ahead log策略，事务提交时先重做日志，再修改页。便于数据恢复，即ACID中的D（Durablity持久性）</p>
+<p>checkpoint之前的页已经刷新回磁盘，发生宕机，只要恢复checkpoint之后的</p>
+<h4 id="第三章-文件"><a href="#第三章-文件" class="headerlink" title="第三章 文件"></a>第三章 文件</h4><p>参数文件：告诉mysql实例启动时在哪里找到数据文件，并指定某些初始化参数</p>
+<p>动态参数，静态参数，@@globle||@@session</p>
+<p>日志文件：记录影响mysql数据库的各种活动</p>
+<p>错误日志：默认文件名为服务器主机名，对启动、运行、关闭进行记录</p>
+<p>慢查询日志：帮助DBA定位待优化的sql语句  time &gt; long_query_time 设置语句时间默认为10s , log_throttle_queries_not_using_indexes默认为0无限制用于限制是否使用索引判断记录到慢查询日志</p>
+<p>show variables like ‘%slow_query_log%’;</p>
+<p><img src="/images/image-20220218105849111.png" srcset="/img/loading.gif" lazyload alt="image-20220218105849111"></p>
+<p>mysqldumpslow -s al -n  10 david.log 查询执行时间最长的10条sql语句</p>
+<p>查询日志：默认 主机名.log 所有信息记录</p>
+<p><strong>二进制日志</strong>：记录对mysql数据库执行更改的所有操作，不包括select和show这类操作</p>
+<p>用于恢复（某些数据恢复，point-in-time恢复），复制（与另一台实时同步），审计（判断注入攻击）</p>
+<p>show variables like ‘datadir’;</p>
+<p>socket件： show variables like ‘socket’; unix域套接字方式连接mysql</p>
+<p>pid文件：启东市将进程ID写入 主机名.pid</p>
+<p>mysql表结构文件：.frm文件</p>
+<p>存储引擎文件：</p>
+<h4 id="第四章-表"><a href="#第四章-表" class="headerlink" title="第四章 表"></a>第四章 表</h4><p>sql_mode  语法校验规则</p>
+<p>enum可以规定域，触发器可以约束值域</p>
+<h5 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h5><p>一个表最多建6个触发器。{insert、update、delete}*{before、after}  3X2&#x3D;6</p>
+<h5 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h5><p>视图是一个的虚表，没有实际物理存储</p>
+<p>1、程序本身不需要关心表结构，按照视图取数据或更新数据，起到安全层的作用</p>
+<p>更新视图，show tables会展示视图（虚表）</p>
+<p>只查看基表。select * from iformation_schema.tables where table_type &#x3D;’BASE TABLE’ and table_schema&#x3D;database() \G;</p>
+<p>\G : 将查询到的横向表格纵向输出，方便阅读</p>
+<p>Oracle支持物化视图，方便查询复杂统计结果。Mysql不支持物化视图，视图总是虚拟的。</p>
+<p>可以定时导入到另一张表实现物化视图的效果。触发器可以实现物化视图。</p>
+<h5 id="分区表"><a href="#分区表" class="headerlink" title="分区表"></a>分区表</h5><p>表或索引分解为多个更小、更可管理的部分。Mysq不支持全局分区</p>
+<p>分区会提高sql性能，但应该非常小心，会产生性能负面影响</p>
+<p>比如按照年份是年份去，只需要crud固定分区，查找多个分区的sql效率低</p>
+<p>range分区连续的，list分区离散的，hash分区为保证数据分布均匀，key分区，columns分区</p>
+<p>子分区，在分区基础上再分区</p>
+<p>分区并不总是和OLTP应用</p>
+<p>innodb存储引擎总是按照主键索引顺序存放的</p>
+<h4 id="第五章-索引和算法"><a href="#第五章-索引和算法" class="headerlink" title="第五章 索引和算法"></a>第五章 索引和算法</h4><h5 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h5><ol>
+<li>当你定义一个主键时,innodb存储引擎就把他当做聚集索引</li>
+<li>如果你没有定义一个主键,则innodb定位到第一个唯一索引,且改索引的所有列值均为非空,就将其当做聚集索引.</li>
+<li>如果表没有主键或者合适的唯一索引,innodb会产生一个隐藏的行ID值6字节的ID聚集索引</li>
+</ol>
+<p>补充: 由于实际的数据页只能按照一颗B+树进行排序，因此每张表只能有一个聚集索引，聚集索引对于主键的排序和范围查找非常有利，</p>
+<h5 id="inndodb索引概述"><a href="#inndodb索引概述" class="headerlink" title="inndodb索引概述"></a>inndodb索引概述</h5><p>B+树索引：最常见和最有效的（balance），并不是找到具体的行，B+数索引是找到数据行所在页。然后数据库把页读到内存，在内存中查找。</p>
+<p>全文索引</p>
+<p>哈希索引</p>
+<h5 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a>数据结构与算法</h5><p>二分法、树</p>
+<p>平衡二叉树（AVL）：任何接节点的两个字数高度最大差为1</p>
+<p>B+树总是保持平衡。但为了保持平衡对于新插入的键值可能需要做大量的拆分页操作。要尽量减少，所以也提供旋转的操作。</p>
+<p><img src="/images/image-20220222085842816.png" srcset="/img/loading.gif" lazyload alt="image-20220222085842816"></p>
+<p>B+树删除操作</p>
+<p>根据填充因子变化</p>
+<p><img src="/images/image-20220222085959643.png" srcset="/img/loading.gif" lazyload alt="image-20220222085959643"></p>
+<p>数据库中B+树索引分为  聚集索引和辅助索引（非聚集索引）。</p>
+<p>B+树具有高扇出性，高度一般为2-4层。</p>
+<p><strong>聚集索引</strong></p>
+<p>聚集索引叶子节点中存放整张表行记录，数据页。每张表只能拥有一个聚集索引。</p>
+<p>聚集索引的存储不是物理上连续，而是逻辑上连续的存储。双向链表。对于主键的排序查找和范围查找非常快。</p>
+<p><strong>辅助索引</strong></p>
+<p>辅助索引包含书签，书签就是对应行数据的聚集索引键</p>
+<p>B+树索引的分裂</p>
+<p>索引的创建和删除，1 alter table ，2 create&#x2F;drop index</p>
+<p>查看索引信息 show index from table\G；</p>
+<p><strong>cardinality</strong>: 表示索引中唯一值的数目的固执。cardinality表的行数应尽可能接近1，如果非常小，那么用户需考虑是否可以删除此索引。</p>
+<p>cardinality，优化器会根据这个值来判断是否使用这个索引。</p>
+<p>cardinality为null，可能会发生建立了缺没用到的情况</p>
+<p>innodb1.0开始支持fast index creation 快速创建索引，FIC </p>
+<p>对辅助索引的创建，innodb会对创建索引的表加上一个S锁，在创建中，不需要重建表。S锁，只能对该表进行读操作。</p>
+<blockquote>
+<p>排它锁(X锁)和共享锁(S锁).<br>X锁,是事务T对数据A加上X锁时,只允许事务T读取和修改数据A<br>S锁,是事务T对数据A加上S锁时,其他事务只能再对数据A加S锁,而不能加X锁,直到T释放A上的S锁</p>
+</blockquote>
+<p>mysql5.6开始支持<strong>Online DDL</strong> 允许创建辅助索引的同时，允许insert、update、delete这类操作。</p>
+<p>old_alter_table默认关闭，默认为 inplace方式创建</p>
+<p>lock：1、none不添加任何锁，不阻塞</p>
+<p>​			2、share：同fic加S锁，遇到写事务会发生等待</p>
+<p>​			3、exclusive：加X锁，读写事务都不能进行，阻断所有线程</p>
+<p>​			4、default: 先判断是否可以使用none模式，不能，则用share，最后为exclusive模式。也就是会通过事务的最大并发来判断ddl的模式。			</p>
+<p>Online DDL 原理为，在创建和删除的同时，将dml操作日志写到一个缓存online_alter_log_max_size(默认128M)，完成后再重做应用到表上，达到数据一致性。</p>
+<p>当更新数据表较大时可以加大size，或者模式改为share。</p>
+<p><strong>在访问表中很少一部分时使用B+树索引才有意义</strong>。对于性别、地区、类型，取值范围小，低选择性，用B+树完全没必要。对字段广的几乎没重复的，即高选择性，B+树索引是最适合的。</p>
+<p>可以show index 结果中列Cardinality来观察，Cardinality&#x2F;n_rows_in_table应尽可能接近1，如果非常小，就是选择性低。</p>
+<p><strong>Cardinality统计</strong></p>
+<p>Cardinality为采样策略，1、当1&#x2F;16数据变化，会更新</p>
+<p>2、stat_modified_counter&gt;2000 000 000 会更新</p>
+<p>。。。好多内容</p>
+<p><strong>B+树索引的使用</strong></p>
+<p><strong>联合索引</strong>：1、（a,b）多个键值的排序，where a&#x3D;？会用到索引where b&#x3D;? 不会用到索引， 2、减少一次排序</p>
+<p>（a,b,c） 依次排序，但where  a&#x3D;？ and c&#x3D;？则需要额外（Extra）Using filesort</p>
+<p>因为（a,c）并未排序</p>
+<p><strong>索引覆盖</strong>：innodb支持覆盖索引，即从辅助索引中就可以得到查询的记录，而不需要查询聚集索引中的记录。 </p>
+<p>不使用索引的情况：多发生于范围查找、join链接操作等</p>
+<p>当访问数据大于20%左右时,优化器会通过聚集索引来查找数据，因为顺序读要远远快于离散读</p>
+<p>如果使用固态，随机读非常快，可以force index（indexName） 强制读取</p>
+<p>multi-range read优化，适用于range，ref , eq_ref 查询 </p>
+<p>开启的语句：set @@optimizer_switch&#x3D;’mrr&#x3D;on,mrr_cost_based&#x3D;off’;</p>
+<p>index condition pushdown(ICP) 优化，支持range、ref 、eq_ref、red_or_null</p>
+<p><img src="/images/image-20220224165911884.png" srcset="/img/loading.gif" lazyload alt="image-20220224165911884"></p>
+<h5 id="哈希算法"><a href="#哈希算法" class="headerlink" title="哈希算法"></a>哈希算法</h5><p>直接寻址</p>
+<p>innodb冲突机制采用链表方式，哈希函数采用除法散列方式。</p>
+<p>自适应哈希索引为创建数据库使用</p>
+<p><strong>全文检索</strong>将存储于数据库中的整本书或者整篇文章的任意内容信息查找出来的技术。innodb1.2后支持全文检索。</p>
+<p>倒排索引，全文索引通常使用倒排索引实现</p>
+<p>。。。好多</p>
+<h4 id="第六章-锁"><a href="#第六章-锁" class="headerlink" title="第六章 锁"></a>第六章 锁</h4><p>锁机制用于管理共享资源的并发访问。</p>
+<p>latch（shuān闩锁）轻量级锁，分为互斥锁和读写锁，通常没有检测思索的机制</p>
+<p>lock的对象为事务，用来锁定数据库中的对象，如表、页、行。一般lock对象仅在事务commit或者rollback进行释放</p>
+<p><img src="/images/image-20220225163704233.png" srcset="/img/loading.gif" lazyload alt="image-20220225163704233"></p>
+<p>锁的类型：</p>
+<p>S锁 <strong>共享锁</strong>，允许事务读一行数据</p>
+<p>X锁 <strong>排他锁</strong>，允许事务删除和更新一行数据</p>
+<p><strong>锁兼容</strong>：a,b都获取到数据行R的某个锁 ，S锁兼容</p>
+<p><img src="/images/image-20220225164944473.png" srcset="/img/loading.gif" lazyload alt="image-20220225164944473"></p>
+<p><strong>意向锁</strong>：不同粒度的锁，innodb允许事务在行级上的锁和表级上的锁同时存在。</p>
+<p>如果需要对页上的记录r进行上X锁，那么分别需要对数据库A、表、页上意向锁IX，最后对记录r上X锁。</p>
+<p>如果给一条记录上X锁，顺序为：</p>
+<p>1、给数据库A上IX锁  2、给表上IX锁  3、给页上IX锁 4、给记录上X锁</p>
+<p>IS Lock <strong>意向共享锁</strong>，事务想要获得一张表中某几行的共享锁</p>
+<p>IX Lock <strong>意向排它锁</strong>，事务想要获得一张表中某几行的排他锁</p>
+<p>show engine innodb status查看锁请求的信息</p>
+<p>一致性锁定读</p>
+<p>自增长和锁，自增的主键插入数据会表锁，在数据插入完成后释放AUTO_INC Locking</p>
+<p>在innodb中自增长值的列必须是索引，同时必须是缩印的第一列。不是第一列会报错。</p>
+<p>外键和锁：innodb会自动对齐加索引</p>
+<h5 id="锁的算法"><a href="#锁的算法" class="headerlink" title="锁的算法"></a>锁的算法</h5><p>1、record lock：单行记录上的锁，给聚集索引的叶子节点中的行记录上锁。读已提交</p>
+<p>2、gap lock：间隙锁，锁定一个范围，但不包括本身。在辅助索引中，给一定范围的索引值上锁</p>
+<p>3、next-key lock: gap lock+record lock ，锁定一个范围，并且锁定记录本身。可重复读</p>
+<p>当查询的索引含有唯一的属性是，innodb存储引擎会对next-key lock优化，降级为record lock，仅在索引为唯一索引的情况下，辅助索引则不。如果走的是辅助索引，那么使用Next-Key Lock，在辅助索引用Gap Lock锁住范围，然后在聚集索引使用Record Lock锁住记录</p>
+<blockquote>
+<ul>
+<li>for update 排他锁，就是行锁</li>
+</ul>
+<p>for update是一种行级锁，又叫排它锁</p>
+<p>只有当出现如下之一的条件，才会释放共享更新锁：<br>1、执行提交（COMMIT）语句<br>2、退出数据库（LOG　OFF）<br>3、程序停止运行</p>
+<p>select … for update 语句是我们经常使用手工加锁语句。在数据库中执行select … for update ,大家会发现会对数据库中的表或某些行数据进行锁表，在mysql中，如果查询条件带有主键，会锁行数据，如果没有，会锁表。</p>
+<ul>
+<li>lock in share mode 就是共享锁</li>
+</ul>
+</blockquote>
+<p>可以显示关闭GAP lock：</p>
+<p>1、事务的隔离级别设置为 read committed</p>
+<p>2、参数innodb_locks_unsafe_for_binlog 设置为1</p>
+<p>如果禁用了Gap Lock，除外键约束和唯一性检查依然需要的Gap lock，那么大多数情况仅仅使用Record Lock。破坏了 事务隔离性，可能会导致主从数据不一致</p>
+<p>phantom problem（幻象问题）:指在同一事务下，连续执行两次同样的sql语句可能导致不同结果。</p>
+<p>lock in share mode</p>
+<h5 id="锁问题"><a href="#锁问题" class="headerlink" title="锁问题"></a>锁问题</h5><p><strong>脏读</strong></p>
+<ul>
+<li><p>脏页</p>
+<p>缓存池中已经被修改的页，但是没刷到新磁盘中，即数据库实例内存和磁盘页数据不一致。但不影响数据一致性，是很正常的。是由于内存和磁盘的异步造成的。数据最终还是会达到一致。</p>
+</li>
+<li><p>脏数据</p>
+<p>指未提交的数据，如果读到脏数据，即一个事务可以读到另一个事务中未提交的数据，违反隔离性。</p>
+<p>脏读发生在事务隔离级别为read uncommitted</p>
+<p>innodb默认为repeatable read</p>
+</li>
+<li><p>不可重复读</p>
+<p>指一个事务内多次读取同一数据集合。read committed会发生不可重复读的现象。属于可接受的，因为读到的是已经提交的数据。</p>
+</li>
+<li><p>丢失更新</p>
+<p>是另一个锁导致的问题，简单来说就是一个事务的更新操作会被另一个事务的更新操作覆盖，从而导致数据的不一致</p>
+<p>后果很严重，加排他锁能解决而</p>
+</li>
+</ul>
+<h5 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h5><p>为了保证事务可以并发且正常运行，innodb_lock_wait_timeout来控制等待时间, 默认50s</p>
+<p>innodb_rollback_on_tieout 来设置等待超时对事务是否回滚，默认不回滚</p>
+<h5 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h5><p>指两个或两个以上的事务在执行过程中，因夺锁资源而造成的一种互相等待的现象。</p>
+<p>解决的方法：</p>
+<ul>
+<li>设置超时时间</li>
+<li>wait-for graph 等待图：锁的信息链表、事务等待链表，通过深度优先算法，主动检测死锁，存在选择回滚undo量最小的事务</li>
+</ul>
+<p>死锁非常少发生，若经常发生，则系统不可用。</p>
+<h5 id="锁升级"><a href="#锁升级" class="headerlink" title="锁升级"></a>锁升级</h5><p>指粒度降低，行锁升级为页锁，页锁升级为表锁。</p>
+<p>innodb不存在锁升级问题，因为不是根据每个记录来产生行锁的。相反，起根据每个事务访问的每个页对锁进行管理，采用位图的方式。因此不管一个事务锁住页中一个记录还是多个记录，其开销通常都是一致的。</p>
+<h4 id="第七章-事务"><a href="#第七章-事务" class="headerlink" title="第七章 事务"></a>第七章 事务</h4><h5 id="认识事务"><a href="#认识事务" class="headerlink" title="认识事务"></a>认识事务</h5><p><strong>ACID</strong></p>
+<p>原子性：要么都做，要么都不做</p>
+<p>一致性：不改变数据库的完整约束，即不改变数据库数据</p>
+<p>隔离性：别称，并发控制、可串行化、锁</p>
+<p>持久性：事务一旦提交，其结果就是永久的。即使发生宕机，数据库也能恢复数据</p>
+<p><strong>分类</strong></p>
+<ul>
+<li><p>扁平事务</p>
+<p>最简单，最频繁的事务。所有操作在同一层次</p>
+</li>
+<li><p>带保存点的扁平事务</p>
+<p>允许事务回滚到同一事务中较早的一个状态。也就是不放弃整个事务，回滚到某个保存点。save work  当系统崩溃时所有保存点都消失</p>
+</li>
+<li><p>链事务</p>
+<p>保存点事务的变种。回滚仅限于当前事务，即只能恢复到最近的一个的保存点</p>
+</li>
+<li><p>嵌套事务</p>
+<p>由顶层事务控制这各个层次的事务</p>
+</li>
+<li><p>分布式事务</p>
+<p>分布式环境下运行的扁平事务，因此需要根据数据所在位置访问网络中的不同节点。符合acid，要么都发生，要么都失效</p>
+</li>
+</ul>
+<h5 id="事务的实现"><a href="#事务的实现" class="headerlink" title="事务的实现"></a>事务的实现</h5><p>redo log 用于保证食物的原子性和持久性，undo log保证事务的一致性</p>
+<ul>
+<li><p>redo</p>
+<p>重做日志</p>
+<p>innodb_flush_log_at_trx_commit 为0或2提高事务提交性能，丧失了acid特性</p>
+<p>log block 重做日志</p>
+<p>log group 重做日志组</p>
+<p>重做日志格式</p>
+<p>lsn：重做日志写入的总量、checkpoint的位置、页的版本</p>
+<p>恢复：</p>
+</li>
+<li><p>undo</p>
+<p>回滚操作，undo是逻辑日志</p>
+<p>例如：插入10条数据insert，undo后进行删除。更新10条，undo后向update将数据修改回去</p>
+<p>MVCC，innodb存储引擎中MVCC的实现是通过undo来完成。当用户读取到一行记录时，若改记录已经被其他事务占用，当前事务可以通过undo读取之前的行信息，一次实现非锁定读取</p>
+<p>undo log会产生redo log，即持久性保护</p>
+<p>undo存储管理。。好多</p>
+<p>undo log格式：insert、update</p>
+<p>查看undo信息：innodb_trx_rollback_segment  </p>
+<p>innodb_trx_undo记录事务对应的undo log  好多。。</p>
+</li>
+<li><p>purge</p>
+<p>进行最终的delete和update操作。因为innodb支持mvcc所以不能在事务提交时立即进行处理。确保该记录不被其他事务应用，才完成最终操作。</p>
+<p>innodb_purge_bath_size  调优，通常为设置越大越好，每次回收的undo page也就越多</p>
+<p>innodb_max_purge_lag</p>
+</li>
+<li><p>group commit</p>
+<p>即一次fsync可以刷新确保多个事务日志被写入文件</p>
+</li>
+</ul>
+<blockquote>
+<p>fsync 函数同步内存中所有已修改的文件数据到储存设备。</p>
+</blockquote>
+<p><img src="/images/image-20220303153853715.png" srcset="/img/loading.gif" lazyload alt="image-20220303153853715"></p>
+<h5 id="事务控制语句"><a href="#事务控制语句" class="headerlink" title="事务控制语句"></a>事务控制语句</h5><p>begin 开启事务</p>
+<p>commit 提交</p>
+<p>rollback 回滚</p>
+<p>savepoint identifier 创建保存点</p>
+<p>release savepoint identifier 删除事务保存点</p>
+<p>rollback to [savepoint]identifier   回滚到标记点  后续需执行需要commit 或者rollback</p>
+<p>set transaction 设置隔离级别</p>
+<h5 id="隐式提交的sql语句"><a href="#隐式提交的sql语句" class="headerlink" title="隐式提交的sql语句"></a>隐式提交的sql语句</h5><p><img src="/images/image-20220303154913987.png" srcset="/img/loading.gif" lazyload alt="image-20220303154913987"></p>
+<p>truncate table是ddl，结果和delete一样，但是不能回滚</p>
+<h5 id="事务操作的统计"><a href="#事务操作的统计" class="headerlink" title="事务操作的统计"></a>事务操作的统计</h5><p>show global status like ‘com_commit’\G;</p>
+<p>com_rollback</p>
+<h5 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h5><p>隔离级别不会影响大幅度性能提升，级别越低保持的锁时间越少</p>
+<p><strong>read uncommitted</strong></p>
+<p><strong>read committed</strong></p>
+<p>除唯一的约束检查和外键检查需要gap lock，不适用 GAP lock 算法，会有主从不一致（升级为repeat）</p>
+<p><strong>repeatable read（默认）</strong></p>
+<p>使用next-key lock锁算法，避免幻读</p>
+<p><strong>serializable</strong></p>
+<p>每个select语句加上 共享锁</p>
+<h5 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h5><p>XA事务</p>
+<h5 id="开发不好的习惯"><a href="#开发不好的习惯" class="headerlink" title="开发不好的习惯"></a>开发不好的习惯</h5><p>存储过程不需要commit，循环进行commit要避免</p>
+<p><img src="/images/image-20220303170146629.png" srcset="/img/loading.gif" lazyload alt="image-20220303170146629"></p>
+<p>将事务一起提交，减少了重做日志文件的时间，</p>
+<p>事务如果写在循环内，或者写事务代码直接循环。会写count次重做日志文件，影响效率</p>
+<p>decline exit handler for sqlexception rollback；</p>
+<p>对事务的begin、commit、rollback操作应该交给程序完成，存储过程需要完成的只是一个逻辑操作，即对逻辑进行封装。</p>
+<p>set autocommit&#x3D;0   &#x2F;&#x2F;设置不自动提交</p>
+<p>call sp_rollback_demo   &#x2F;&#x2F;执行存储过程   、、应该能在这附近加事务</p>
+<p>commit   &#x2F;&#x2F;提交</p>
+<p>catch exception  &#x2F;&#x2F;捕捉错误</p>
+<p>rollback  &#x2F;&#x2F;回滚</p>
+<p>print e  &#x2F;&#x2F;打印错误</p>
+<h5 id="长事务"><a href="#长事务" class="headerlink" title="长事务"></a>长事务</h5><p>执行事件较长的事务。1-5小时</p>
+<p>最好分解为小批量事务来完成，</p>
+<h4 id="第八章-备份和恢复"><a href="#第八章-备份和恢复" class="headerlink" title="第八章 备份和恢复"></a>第八章 备份和恢复</h4><h5 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h5><p>根据备份方法分类</p>
+<ol>
+<li>hot back：直接在运行中备份，对正在运行的 数据库没影响online backup</li>
+<li>cold back：程序停止运行后，备份，一般为复制物理文件，最为简单</li>
+<li>warm back：也是运行中备份，对数据库有影响，如加全局锁保证备份数据的一致性</li>
+</ol>
+<p>根据备份后文件分类：</p>
+<ol>
+<li>逻辑备份：备份出的文件是可读的。一条条sql，如mysqldump和select * into outfile 的方法。适合升级、迁移，缺点耗时长</li>
+<li>裸文件备份：物理文件备份，恢复时间短很多</li>
+</ol>
+<p>备份内容分类：</p>
+<ol>
+<li>完全备份：数据完全备份</li>
+<li>增量备份：上次备份基础上，对修改数据备份，官方没有增量备份，一般为二进制日志完成</li>
+<li>日志备份：指对二进制日志备份，通过replay来重做point-in-time的恢复工作</li>
+</ol>
+<h5 id="冷备"><a href="#冷备" class="headerlink" title="冷备"></a>冷备</h5><ul>
+<li>优点：备份简单、易于不同系统、快、不需要重建索引</li>
+<li>缺点：文件比逻辑文件大，包含undo、插入缓存，跨平台会出现问题，文件大小写，浮点数格式</li>
+</ul>
+<h5 id="逻辑备份"><a href="#逻辑备份" class="headerlink" title="逻辑备份"></a>逻辑备份</h5><ol>
+<li><p>mysqldump</p>
+<p>备份所有的数据库</p>
+<p>mysqldump –all –databases &gt;dump.sql  </p>
+<p>备份指定数据库</p>
+<p>mysqldump –databases db1 db2 db3 &gt;dump.sql </p>
+<p>对test架构备份</p>
+<p> mysqldump –single-transaction test&gt;test_backup.sql </p>
+<p>mysqldump有很多参数设置 好多</p>
+</li>
+<li><p>select … into outfile</p>
+<p>一种逻辑备份的方法</p>
+</li>
+<li><p>逻辑备份的恢复</p>
+<p>mysqldump恢复</p>
+<p>mydql -uroot -p &lt;test_backup.sql</p>
+<p>然后输入密码</p>
+<p>source &#x2F;home&#x2F;mysql&#x2F;test_backup.sql 备份逻辑文件</p>
+<p>mysqldump不能导出视图，需要单独导出试图定义，或者备份frm文件</p>
+</li>
+<li><p>load data infile</p>
+</li>
+<li><p>mysqlimport</p>
+</li>
+</ol>
+<h5 id="二进制日志备份和恢复"><a href="#二进制日志备份和恢复" class="headerlink" title="二进制日志备份和恢复"></a>二进制日志备份和恢复</h5><p>point-in-time 恢复</p>
+<p>文件启用设置 log-bin&#x3D;mysql-bin</p>
+<p>恢复单个</p>
+<p>mysqlbinog binlog.00001 | mysql -uroot -p test</p>
+<p>恢复多个</p>
+<p>mysqlbinog binlog.[0-10]* | mysql -uroot -p test</p>
+<h5 id="热备"><a href="#热备" class="headerlink" title="热备"></a>热备</h5><ol>
+<li>ibbackup</li>
+<li>xtrabackup</li>
+</ol>
+<h5 id="快照备份"><a href="#快照备份" class="headerlink" title="快照备份"></a>快照备份</h5><h5 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h5><h4 id="第九章-性能调优"><a href="#第九章-性能调优" class="headerlink" title="第九章 性能调优"></a>第九章 性能调优</h4><p>cpu：选择 64位 多核</p>
+<p>内存： 直接反映性能 缓冲池达到20GB和22GB性能极大提升，缓冲池命中率不小于99%</p>
+<p>硬盘：机械组raid 例如raid 0，固态</p>
+<p>radi说明好多。。</p>
+<p>操作系统</p>
+<p>文件系统</p>
+<p>基准测试工具</p>
+<h4 id="第十章-innodb-存储引擎的编译和调试"><a href="#第十章-innodb-存储引擎的编译和调试" class="headerlink" title="第十章 innodb 存储引擎的编译和调试"></a>第十章 innodb 存储引擎的编译和调试</h4><p>获取源代码</p>
+<p>win、linux 调试</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/reading/" class="category-chain-item">reading</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/reading/mysql/" class="category-chain-item">mysql</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/mysql/">#mysql</a>
+      
+        <a href="/tags/innodb/">#innodb</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>《MySQL技术内幕》笔记</div>
+      <div>http://example.com/2022/03/04/MYSQL技术内幕/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>sleep2u</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/09/29/Hello-Hexo/" title="Hello Hexo">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Hello Hexo</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
